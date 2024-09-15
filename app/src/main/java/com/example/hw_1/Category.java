@@ -1,14 +1,12 @@
 package com.example.hw_1;
 
-public class Product {
+public class Category {
     private int image;
     private String name;
-    private double price;
 
-    public Product(int image, String name, double price) {
-        this.image = image;
+    public Category(int imageResource, String name) {
+        this.image = imageResource;
         this.name = name;
-        this.price = price;
     }
 
     public int getImageResource() {
@@ -18,8 +16,5 @@ public class Product {
     public String getName() {
         return name;
     }
-
-    public double getPrice() {
-        return price;
-    }
 }
+

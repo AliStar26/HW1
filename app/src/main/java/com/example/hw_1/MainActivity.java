@@ -1,46 +1,52 @@
 package com.example.hw_1;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Product> products;
-    private ProductAdapter adapter;
+    private TextView selectedCategoryTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ListView listView = findViewById(R.id.listView);
+        Spinner spinner = findViewById(R.id.spinner);
+        selectedCategoryTextView = findViewById(R.id.selectedCategoryTextView);
 
-        products = new ArrayList<>();
-        products.add(new Product(R.drawable.ic_launcher_foreground, "Молоко", 1.50));
-        products.add(new Product(R.drawable.ic_launcher_foreground, "Хлеб", 0.80));
-        products.add(new Product(R.drawable.ic_launcher_foreground, "Яблоки", 2.30));
+        // Создаем список категорий
+        ArrayList<Category> categories = new ArrayList<>();
+        categories.add(new Category(R.drawable.ic_launcher_foreground, "Фрукты"));
+        categories.add(new Category(R.drawable.ic_launcher_foreground, "Овощи"));
+        categories.add(new Category(R.drawable.ic_launcher_foreground, "Молочные продукты"));
 
-        adapter = new ProductAdapter(this, products);
-        listView.setAdapter(adapter);
+        // Создаем и устанавливаем адаптер
+        CategoryAdapter adapter = new CategoryAdapter(this, categories);
+        spinner.setAdapter(adapter);
 
-        listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            products.remove(position);
-            adapter.notifyDataSetChanged();
-            return true;
+        // Обработка выбора элемента из Spinner
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Category selectedCategory = (Category) parent.getItemAtPosition(position);
+                selectedCategoryTextView.setText("Вы выбрали: " + selectedCategory.getName());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedCategoryTextView.setText("Ничего не выбрано");
+            }
         });
     }
-
 
 }
