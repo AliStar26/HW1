@@ -1,7 +1,9 @@
 package com.example.hw_1;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -15,32 +17,30 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<String> names;
-    private ArrayAdapter<String> adapter;
-    private ListView listView;
-    private EditText editText;
+    private ArrayList<Product> products;
+    private ProductAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        names = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names);
+        ListView listView = findViewById(R.id.listView);
 
-        listView = findViewById(R.id.listView);
+        products = new ArrayList<>();
+        products.add(new Product(R.drawable.ic_launcher_foreground, "Молоко", 1.50));
+        products.add(new Product(R.drawable.ic_launcher_foreground, "Хлеб", 0.80));
+        products.add(new Product(R.drawable.ic_launcher_foreground, "Яблоки", 2.30));
+
+        adapter = new ProductAdapter(this, products);
         listView.setAdapter(adapter);
 
-        editText = findViewById(R.id.editText);
-        Button button = findViewById(R.id.button);
-
-        button.setOnClickListener(v -> {
-            String name = editText.getText().toString();
-            if (!name.isEmpty()) {
-                names.add(name);
-                adapter.notifyDataSetChanged();
-                editText.setText("");
-            }
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            products.remove(position);
+            adapter.notifyDataSetChanged();
+            return true;
         });
     }
+
+
 }
